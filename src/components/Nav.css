@@ -1,0 +1,26 @@
+.nav {
+  position: fixed;
+  display: flex;
+  padding: 30px;
+  justify-content: space-between;
+  align-items: baseline;
+  width: 100%;
+  z-index: 100;
+
+  /* transition */
+  transition-timing-function: ease-in;
+  transition: all 0.5s;
+}
+
+.nav__black {
+  background-color: #111;
+}
+
+.nav__logo {
+  height: 42px;
+}
+.nav__logo__user {
+  height: 45px;
+  position: fixed;
+  right: 35px;
+}

@@ -1,33 +1,40 @@
-import React from "react";
+import React, { useState } from 'react';
 
-import "./App.css";
-import Row from "./components/Row";
-import requests from "./requests";
-import Banner from "./components/Banner";
+import './App.css';
+import Row from './components/Row';
+import { dataMovies } from './requests';
+import Banner from './components/Banner';
+import Nav from './components/Nav';
 
 function App() {
-  console.log();
-  return (
-    <div className="App">
-      {/* Navbar */}
-      <Banner />
+  const [trailerUrl, setTrailerUrl] = useState('');
+  const [currentRow, setCurrentRow] = useState('');
+  const handleChangeUrl = (valueArr) => {
+    if (valueArr[0] !== currentRow) setCurrentRow(valueArr[0]);
+    if (valueArr[1]) setTrailerUrl(valueArr[1]);
+  };
 
+  const displayAllRows = dataMovies?.map((row, index) => {
+    return (
+      <Row
+        key={index}
+        trailerUrl={trailerUrl}
+        currentRow={currentRow}
+        handleChangeUrl={handleChangeUrl}
+        title={row.title}
+        fetchURL={row.fetchURL}
+        isLargeRow
+        rowNumber={index + 1}
+      />
+    );
+  });
+
+  return (
+    <div className='App'>
+      <Nav></Nav>
+      <Banner />
       {/* banner */}
-      <Row
-        title="Netflix Originals"
-        fetchURL={requests.fetchNetflixOriginals}
-        isLargeRow // =={true}
-      />
-      <Row title="Trending Now" fetchURL={requests.fetchTrending} />
-      <Row title="Top Rated" fetchURL={requests.fetchTopRate} />
-      <Row title="Action Movies" fetchURL={requests.fetchActionMovies} />
-      <Row title="Comedy Movies" fetchURL={requests.fetchComedyMovies} />
-      <Row title="Horror Movies" fetchURL={requests.fetchHorrorMovies} />
-      <Row title="Romance Movies" fetchURL={requests.fetchRomanceMovies} />
-      <Row
-        title="Documentary Movies"
-        fetchURL={requests.fetchDocumentarMovies}
-      />
+      {displayAllRows}
     </div>
   );
 }

@@ -1,11 +1,22 @@
-import React, { useState, useEffect } from "react";
-import axios from "../axios";
-import "./Row.css";
+import React, { useState, useEffect } from 'react';
+import movieTrailer from 'movie-trailer';
+import YouTube from 'react-youtube';
+import axios from '../axios';
+import './Row.css';
 
-const base_url_poster = "https://image.tmdb.org/t/p/original/";
+const base_url_poster = 'https://image.tmdb.org/t/p/original/';
 
-function Row({ title, fetchURL, isLargeRow }) {
-  const [movies, setMovies] = useState([]); //  movies = []
+function Row({
+  title,
+  fetchURL,
+  isLargeRow,
+  rowNumber,
+  trailerUrl,
+  handleChangeUrl,
+  currentRow,
+}) {
+  const [movies, setMovies] = useState([]);
+  const [myRow, setIsMyRow] = useState(false);
 
   //conditional
 
@@ -16,18 +27,39 @@ function Row({ title, fetchURL, isLargeRow }) {
       return request;
     }
     fetchData();
-  }, [fetchURL]); //if [] , run once when the row loads, and dont run again / if[movies] - it will run everytime the movie changes
+  }, [fetchURL]);
 
-  //console.log(movies);
+  useEffect(() => {
+    const isMyRow = currentRow === rowNumber;
+    setIsMyRow(isMyRow);
+  }, [currentRow, rowNumber]);
+
+  const options = {
+    height: '420',
+    width: '630',
+    playerVars: {},
+    autoplay: true,
+  };
+
+  const handleClick = (movie) => {
+    movieTrailer(movie?.name || movie?.original_title || movie?.title)
+      .then((url) => {
+        const urlParams = new URLSearchParams(new URL(url).search);
+
+        handleChangeUrl([rowNumber, urlParams.get('v')]);
+      })
+      .catch((error) => console.log(error));
+  };
+
   return (
-    <div className="row">
+    <div className='row'>
       <h2>{title}</h2>
-
-      <div className="row__posters">
+      <div className='row__posters'>
         {/* container ->posters */}
-        {movies.map((movie) => (
+        {movies?.map((movie) => (
           <img
-            className={`row__poster ${isLargeRow && "row__posterLarge"}`}
+            onClick={() => handleClick(movie)}
+            className={`row__poster ${isLargeRow && 'row__posterLarge'}`}
             key={movie.id}
             src={`${base_url_poster}${
               isLargeRow ? movie.poster_path : movie.backdrop_path
@@ -36,8 +68,11 @@ function Row({ title, fetchURL, isLargeRow }) {
           />
         ))}
       </div>
-
-      {/*  */}
+      {myRow && trailerUrl && (
+        <div className='row__clip_container'>
+          <YouTube videoId={trailerUrl} opts={options} />
+        </div>
+      )}
     </div>
   );
 }
