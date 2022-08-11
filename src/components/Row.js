@@ -56,17 +56,21 @@ function Row({
       <h2>{title}</h2>
       <div className='row__posters'>
         {/* container ->posters */}
-        {movies?.map((movie) => (
-          <img
-            onClick={() => handleClick(movie)}
-            className={`row__poster ${isLargeRow && 'row__posterLarge'}`}
-            key={movie.id}
-            src={`${base_url_poster}${
-              isLargeRow ? movie.poster_path : movie.backdrop_path
-            }`}
-            alt={movie.name}
-          />
-        ))}
+        {movies?.map((movie) => {
+          if (movie)
+            return (
+              <img
+                onClick={() => handleClick(movie)}
+                className={`row__poster ${isLargeRow && 'row__posterLarge'}`}
+                key={movie.id}
+                src={`${base_url_poster}${
+                  isLargeRow ? movie.poster_path : movie.backdrop_path
+                }`}
+                alt={movie.name}
+              />
+            );
+          return <></>;
+        })}
       </div>
       {myRow && trailerUrl && (
         <div className='row__clip_container'>

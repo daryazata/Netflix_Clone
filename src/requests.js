@@ -45,8 +45,4 @@ export const dataMovies = [
     title: 'Documentary Movies',
     fetchURL: requests.fetchDocumentarMovies,
   },
-  {
-    title: 'Genre Movies',
-    fetchURL: requests.fetchGenres,
-  },
 ];
