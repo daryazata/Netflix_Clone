@@ -1,6 +1,6 @@
 This is Netflix Clone Demo 
 
-https://netflix-clone-1a0d8.web.app/
+https://daryazata.github.io/Netflix_Clone/
 
 
 when cloning add you movie datbase api key
